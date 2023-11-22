@@ -10,17 +10,19 @@ import Reset from "./Components/Reset"
 import Profile from "./Components/Profile"
 import PageNotFound from "./Components/PageNotFound"
 import UserName from "./Components/UserName"
-function App() {
+import {AuthorizeUser , ProtectRoute} from "./middleware/auth"
 
+function App() {
+  
   return <>
   <BrowserRouter>
   <Routes>
     <Route path='/' element={<Login/>} />
     <Route path='/username' element={<UserName/>}/>
-    <Route path="/password" element={<Password/>}/>
+    <Route path="/password" element={<ProtectRoute><Password/></ProtectRoute>}/>
     <Route path='/register' element={<Register/>} />
     <Route path='/reset' element={<Reset/>} />
-    <Route path='/profile' element={<Profile/>} />
+    <Route path='/profile' element={<AuthorizeUser><Profile/></AuthorizeUser>} />
     <Route path='/recovery' element={<Recovery/>} />
     <Route path='/pagenotfound' element={<PageNotFound/>} />
    

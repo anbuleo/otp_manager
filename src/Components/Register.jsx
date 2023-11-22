@@ -1,28 +1,38 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png'
-import { Toaster } from 'react-hot-toast'
+import toast,{ Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import registerValidation from '../common/Validate'
 import convertToBase64 from '../common/Convert.js'
+import {registerUser} from '../common/Common.js'
 
 function Register() {
+
+  const navigate = useNavigate()
   const [file,setFile] = useState()
 
-    const formik =useFormik({
-        initialValues : {
-            username:'',
-            email:"",
-            password :''
-        },
-        validate:registerValidation,
-        validateOnBlur:false,
-        validateOnChange:false,
-        onSubmit: async values =>{
-          values = await Object.assign(values,{profile : file || ''})
-            console.log(values)
-        }
-    })
+  const formik = useFormik({
+    initialValues : {
+      email: 'doyol56239@cnogs.com',
+      username: 'example123',
+      password : 'admin@123'
+    },
+    validate : registerValidation,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit : async values => {
+      values = await Object.assign(values, { profile : file || ''})
+      let registerPromise = registerUser(values)
+      toast.promise(registerPromise, {
+        loading: 'Creating...',
+        success : <b>Register Successfully...!</b>,
+        error : <b>Could not Register.</b>
+      });
+
+      registerPromise.then(function(){ navigate('/username')});
+    }
+  })
 
     /**Formik doesn't support file upload so we need to create this handler */
     const onUpload = async e =>{
@@ -41,7 +51,7 @@ function Register() {
     <div className="container fluid ">
         <Toaster position='top-center' reverseOrder={false}></Toaster>
         <div className=" text-center mt-5 col d-flex justify-content-center">
-            <div className=' card cardSetup shadow p-3 mb-5 bg-white rounded '>
+            <div className=' card cardSetup shadow p-3 mb-5  rounded '>
                 <div className="">
                     <h4 className='h4'>Register</h4>
                     <p>Happy to join you</p>
@@ -63,7 +73,7 @@ function Register() {
                         <button className='btn btn-primary p-2 w-100' type='submit'>Register</button>
                         </div> 
                         <div className="text-center mb-4">
-                            <span>Already Register? <Link to='/login' style={{"textDecoration":"none" , "color":"orangered"}}>Sign In</Link></span>
+                            <span>Already Register? <Link to='/username' style={{"textDecoration":"none" , "color":"orangered"}}>Sign In</Link></span>
                         </div>                     
                     </form>
                     

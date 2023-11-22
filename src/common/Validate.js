@@ -1,14 +1,46 @@
 
 import toast from 'react-hot-toast'
+// import authenticate from '../common/Common.js'
+import axios from 'axios'
+
+let URL = import.meta.env.VITE_SERVER_DOMIN
+
+
+axios.defaults.baseURL = URL
+
+/* authenticate function */
+
+let authenticate = async(username)=>{
+
+    console.log(URL)
+    console.log(username)
+    try {
+        return await axios.post('/api/authenticate',{username})
+        
+        
+    } catch (error) {
+        console.log(error)
+        return { error : "username doesn't exist"}
+    }
+}
+
 /** user name validate */
 export async function userNameValidate(values) {
     const errors =userNameVerify({},values)
+    
+    if(values.username){
+        const { status } = await authenticate(values.username)
+        if(status != 200){
+            errors.exist = toast.error("User does not exist")
+        }
+    }
 
 
   return errors
 }
 
 let userNameVerify = (error = {},values)=>{
+    
     if(!values.username){
         error.username = toast.error('UserName Required..!')
     }
@@ -69,6 +101,13 @@ export default function registerValidation(values){
     const errors = userNameVerify({},values)
     passwordVerify(errors,values)
     emailVerify(errors,values)
+
+    return errors
+}
+/** vaildate profile page*/
+
+export  async function profileValidation(values){
+    const errors = emailVerify({},values)
 
     return errors
 }
