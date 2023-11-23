@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png'
 import toast,{ Toaster } from 'react-hot-toast'
-import {useFetch} from '../hooks/fectchHook.js'
+import useFetch from '../hooks/fectchHook.js'
 import { useFormik } from 'formik'
 import { useAuthStore } from '../store/store.js'
 import {profileValidation} from '../common/Validate'
@@ -31,12 +31,14 @@ function Profile() {
         onSubmit: async values =>{
           values = await Object.assign(values,{profile : file ||apiData?.profile || ''})
           let updatePromise = updateUser(values)
+          console.log(values)
           toast.promise(updatePromise, {
             loading : 'Updating...',
             success : <b>update Successfully...!</b>,
             error : <b>Could not Update!</b>
         });
-            console.log(values)
+        navigate('/')
+           
         }
     })
 

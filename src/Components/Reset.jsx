@@ -1,12 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png'
-import { Toaster } from 'react-hot-toast'
+import toast,{ Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import {resetPasswordValidation} from '../common/Validate'
-
+import {resetPassword} from '../common/Common.js'
+import { useAuthStore } from '../store/store'
+import useFetch from '../hooks/fectchHook.js'
+import { useEffect } from 'react'
 function Reset() {
+    const {username} = useAuthStore(state => state.auth)
+    const [{isLoading,status, apiData,serverError}] = useFetch('createResetSession')
+    let navigate = useNavigate()
+    useEffect(()=>{
 
+    },[])
     const formik =useFormik({
         initialValues : {
             password :'',
@@ -16,9 +24,20 @@ function Reset() {
         validateOnBlur:false,
         validateOnChange:false,
         onSubmit: async values =>{
+            let resetPromise = resetPassword({username, password: values.password})
+        toast.promise(resetPromise,{
+            loading : 'Updating...',
+            success:<b>Reset Successfully....</b>,
+            error : <b>Could not Reset !</b>
+        })
+        resetPromise.then(()=>navigate('/'))
+
             console.log(values)
         }
     })
+    if(isLoading) return <h1>isLoading</h1>
+    if(serverError) return <h1 style={{"color":"red"}}>{serverError.message}</h1>
+    if(status && status !==201) return <Navigate to={'/'} replace={true}></Navigate>
   return (
     
     <div className="container fluid ">

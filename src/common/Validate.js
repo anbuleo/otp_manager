@@ -12,14 +12,15 @@ axios.defaults.baseURL = URL
 
 let authenticate = async(username)=>{
 
-    console.log(URL)
-    console.log(username)
+    //console.log(URL)
+    //console.log(username)
+   
     try {
         return await axios.post('/api/authenticate',{username})
         
         
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         return { error : "username doesn't exist"}
     }
 }
@@ -28,8 +29,10 @@ let authenticate = async(username)=>{
 export async function userNameValidate(values) {
     const errors =userNameVerify({},values)
     
+    
     if(values.username){
         const { status } = await authenticate(values.username)
+        console.log(status)
         if(status != 200){
             errors.exist = toast.error("User does not exist")
         }

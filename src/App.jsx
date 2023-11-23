@@ -17,9 +17,9 @@ function App() {
   return <>
   <BrowserRouter>
   <Routes>
-    <Route path='/' element={<Login/>} />
+    <Route path='/' element={<UserName/>} />
     <Route path='/username' element={<UserName/>}/>
-    <Route path="/password" element={<ProtectRoute><Password/></ProtectRoute>}/>
+    <Route path="/password" element={<Password/>}/>
     <Route path='/register' element={<Register/>} />
     <Route path='/reset' element={<Reset/>} />
     <Route path='/profile' element={<AuthorizeUser><Profile/></AuthorizeUser>} />

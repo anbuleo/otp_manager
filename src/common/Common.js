@@ -14,6 +14,7 @@ axios.defaults.baseURL = URL
 /* authenticate function */
 export async function getUsername(){
     const token = localStorage.getItem('token')
+    console.log(token)
     if(!token) return Promise.reject("Cannot find Token");
     let decode = jwtDecode(token)
     return decode;
@@ -68,9 +69,10 @@ export  async function registerUser(Credentials){
 export async function verifyPassword({username,password}){
     try {
         if(username){
+            console.log(username)
            const data =  await axios.post('api/login',{username,password})
             return Promise.resolve({data})
-            console.log(data)
+            
         }
         
     } catch (error) {
@@ -81,11 +83,13 @@ export async function verifyPassword({username,password}){
 /**update function */
 
 export async function updateUser(Response){
-
+    console.log(Response,localStorage)
     try {
         
         const token = await localStorage.getItem('token')
-        const data =await axios.put(`/api/updateuser/${_id}`,Response,{headers : {"Authorization": `Bearer ${token}`}})
+        console.log(token)
+        const data =await axios.put(`/api/updateuser`,Response,{headers : {"Authorization": `Bearer ${token}`}})
+        console.log(data)
         return Promise.resolve(data)
     } catch (error) {
         return Promise.reject({error : "couldn't update profile"})
@@ -94,11 +98,11 @@ export async function updateUser(Response){
 /**generate otp */
 export async function generateOTP(username){
     try {
-        console.log(username)
+        
         
         
         const {data : { code }, status } = await axios.get('/api/generateOTP', { params : { username }});
-        console.log(status)
+        
         // send mail with the OTP
         if(status === 201){
             let usereemail = await getUser({ username });
@@ -118,16 +122,21 @@ export async function generateOTP(username){
 
 /** verify otp*/
 export async function verifyOTP({ username, code }){
+    
+    console.log(username, code)
+
     try {
        const { data, status } = await axios.get('/api/verifyOTP', { params : { username, code }})
        return { data, status }
+       
     } catch (error) {
+        console.log(error)
         return Promise.reject(error);
     }
 }
 
 /** reset password */
-const  resetPassword=async({ username, password })=>{
+export async function resetPassword({ username, password }){
     try {
         const { data, status } = await axios.put('/api/resetPassword', { username, password });
         return Promise.resolve({ data, status})
@@ -145,5 +154,5 @@ export default {
    
    
     
-    resetPassword
+    
 }

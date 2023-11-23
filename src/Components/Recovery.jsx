@@ -10,20 +10,25 @@ function Recovery() {
     const [ OTP, setOTP] = useState()
     useEffect(()=>{
         generateOTP(username).then((OTP)=>{
-            console.log(username)
+            console.log(username,OTP)
             if(OTP) return toast.success('OTP has been send to your email');
             return toast.error('Problem while generating OTP')
         })
     },[username])
     let onSubmit = async(e)=>{
         e.preventDefault();
-        let {status}= await verifyOTP({username, code:OTP})
-        if(status === 201){
-            toast.success('Verify Successfully !')
-            return navigate('/reset')
+        try {
+            let { status } = await verifyOTP({ username, code : OTP })
+            if(status === 201){
+              toast.success('Verify Successfully!')
+               navigate('/reset')
+            }  
+          } catch (error) {
+             toast.error('Wront OTP! Check email again!')
+          }
         }
-        return toast.error('Wrong OTP! Check email')
-    }
+      
+    
     //resend otp
     let resendOTP = ()=>{
         let sendPromise = generateOTP(username)
@@ -59,12 +64,13 @@ function Recovery() {
                         <div className="textbox form-group d-flex gap-3 justify-content-center ">                        
                         
 
-                        <button onClick={resendOTP} className='btn btn-primary p-2 w-100 mt-2' type='submit'>Recover</button>
+                        <button className='btn btn-primary p-2 w-100 mt-2' type='submit'>Recover</button>
                         </div> 
-                        <div className="text-center mb-4">
-                            <span>Can't get OTP? <button to='/recovery' style={{"border":"none" , "color":"orangered","backgroundColor":"none"}}>Resend</button></span>
-                        </div>                     
+                                           
                     </form>
+                    <div className="text-center mb-4">
+                            <span>Can't get OTP? <button onClick={resendOTP} style={{"border":"none" , "color":"orangered","backgroundColor":"none"}}>Resend</button></span>
+                        </div>  
                     
                 </div>
             </div>
