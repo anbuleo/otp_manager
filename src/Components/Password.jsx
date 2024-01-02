@@ -17,7 +17,7 @@ function Password() {
    
   const formik = useFormik({
     initialValues : {
-      password : 'test@123'
+      password : ''
     },
     validate : passwordValidate,
     validateOnBlur: false,
@@ -44,7 +44,7 @@ function Password() {
     }
   })
 
-  if(isLoading) return <h1>isLoading</h1>
+  if(isLoading) return <h1>isLoading...</h1>
     if(serverError) return <h1 style={{"color":"red"}}>{serverError.message}</h1>
 
   return <div className="container fluid ">

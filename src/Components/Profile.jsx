@@ -37,8 +37,7 @@ function Profile() {
             success : <b>update Successfully...!</b>,
             error : <b>Could not Update!</b>
         });
-        navigate('/')
-           
+        navigate('/login')           
         }
     })
 

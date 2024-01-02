@@ -23,6 +23,7 @@ function App() {
     <Route path='/register' element={<Register/>} />
     <Route path='/reset' element={<Reset/>} />
     <Route path='/profile' element={<AuthorizeUser><Profile/></AuthorizeUser>} />
+    <Route path='/login' element={<AuthorizeUser><Login/></AuthorizeUser>} />
     <Route path='/recovery' element={<Recovery/>} />
     <Route path='/pagenotfound' element={<PageNotFound/>} />
    
