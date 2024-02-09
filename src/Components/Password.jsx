@@ -13,7 +13,7 @@ function Password() {
   const navigate = useNavigate()
   const { username } = useAuthStore(state => state.auth)
   
-  const [{isLoading,apiData,serverError}] = useFetch(`/user/${username}`)
+  const [{isLoading,apiData,serverError}] = useFetch(`users/${username}`)
    
   const formik = useFormik({
     initialValues : {

@@ -38,7 +38,7 @@ function Register() {
     const onUpload = async e =>{
       try {
         const base64 = await convertToBase64(e.target.files[0])
-        console.log(base64)
+        // console.log(base64)
       setFile(base64)
       } catch (error) {
 
