@@ -14,7 +14,7 @@ axios.defaults.baseURL = URL
 /* authenticate function */
 export async function getUsername(){
     const token = localStorage.getItem('token')
-    console.log(token)
+    // console.log(token)
     if(!token) return Promise.reject("Cannot find Token");
     let decode = jwtDecode(token)
     return decode;
@@ -36,7 +36,7 @@ let authenticate = async(username)=>{
 
 const getUser = async({username})=>{
     try {
-        const {data} = await axios.get(`api/user/${username}`)
+        const {data} = await axios.get(`/api/users/${username}`)
         return {data}
     } catch (error) {
 
@@ -49,16 +49,18 @@ const getUser = async({username})=>{
 export  async function registerUser(Credentials){
     
     try {
-        const { data : { msg }, status } = await axios.post(`/api/register`, Credentials);
-
+        const res = await axios.post(`/api/register`, Credentials);
+        console.log(res)
+        // const { data : { msg }, status } = await axios.post(`/api/register`, Credentials);
+       
         let { username, email } = Credentials;
-
+        console.log(Credentials)
         /** send email */
-        if(status === 201){
-            await axios.post('/api/registerMail', { username, userEmail : email, text : msg})
+        if(res.status === 201){
+            await axios.post('/api/registerMail', { username, userEmail : email, text : res.data.message})
         }
 
-        return Promise.resolve(msg)
+        return Promise.resolve(res.data.message)
     } catch (error) {
         console.log(error)
         return Promise.reject({ error })
@@ -70,7 +72,7 @@ export async function verifyPassword({username,password}){
     try {
         if(username){
             console.log(username)
-           const data =  await axios.post('api/login',{username,password})
+           const data =  await axios.post('/api/login',{username,password})
             return Promise.resolve({data})
             
         }
@@ -83,13 +85,13 @@ export async function verifyPassword({username,password}){
 /**update function */
 
 export async function updateUser(Response){
-    console.log(Response,localStorage)
+    // console.log(Response,localStorage)
     try {
         
         const token = await localStorage.getItem('token')
-        console.log(token)
+        // console.log(token)
         const data =await axios.put(`/api/updateuser`,Response,{headers : {"Authorization": `Bearer ${token}`}})
-        console.log(data)
+        // console.log(data)
         return Promise.resolve(data)
     } catch (error) {
         return Promise.reject({error : "couldn't update profile"})
